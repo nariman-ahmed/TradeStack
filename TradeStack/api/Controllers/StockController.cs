@@ -29,21 +29,27 @@ namespace api.Controllers
             _context = context;
         }
 
-        //Any database data extraction takes time, so we need to make our methods asynchronous.
-        //So we wrap any line that has database interaction (EF methonds) in an async-await keywords.
-
         [HttpGet]
         public async Task<IActionResult> GetAllStocks()
         {
-            //so now we can use _stockRepo instead of _context.
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+   
             var stocks = await _stockRepo.GetAllStocksAsync();
             var stocksDto = stocks.Select(s => s.ToStockDto());
             return Ok(stocksDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]  //add route contraints on the ids
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             //Here we are getting a stock by its id from the database
             var stock = await _stockRepo.GetByIdAsync(id);
 
@@ -60,6 +66,11 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var StockModel = stockDto.ToStockFromCreatedDto();
 
             await _stockRepo.CreateAsync(StockModel);
@@ -68,9 +79,14 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var StockModel = await _stockRepo.UpdateAsync(id, updateDto);
 
             if (StockModel == null)
@@ -82,9 +98,14 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var StockModel = await _stockRepo.DeleteAsync(id);
 
             if (StockModel == null)

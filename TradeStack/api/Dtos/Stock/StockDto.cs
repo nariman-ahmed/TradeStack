@@ -6,9 +6,6 @@ using api.Dtos.Comment;
 
 namespace api.Dtos.Stock
 {
-    /*This class is created specifically for the GET methods. When the user wants to show all stocks or a certain
-    stock, we want to provide all attributes in the JSON except the comments (you can choose to hide anything you
-    want using DTOs)*/
     public class StockDto
     {
         public int Id { get; set; }
