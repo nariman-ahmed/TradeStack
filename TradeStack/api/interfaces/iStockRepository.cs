@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Stock;
+using api.Helpers;
 using api.Models;
 
 /*An interface is a contract or blueprint that defines the methods that a class MUST implement.
@@ -18,7 +19,7 @@ namespace api.interfaces
     {
         //All methods in an interface are public and abstract by default.
         //The return type is a single stock or a list of stock objects that we extract from DB.
-        Task<List<Stock>> GetAllStocksAsync();
+        Task<List<Stock>> GetAllStocksAsync(QueryObject query);
 
         //The "?" here is because the return could be NULL
         Task<Stock?> GetByIdAsync(int id);

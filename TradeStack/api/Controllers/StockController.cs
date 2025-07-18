@@ -10,6 +10,7 @@ using api.Dtos.Stock;
 using Microsoft.EntityFrameworkCore;
 using api.Repository;
 using api.interfaces;
+using api.Helpers;
 
 /*Now this is our Contoller, our API basically*/
 
@@ -30,14 +31,14 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStocks()
+        public async Task<IActionResult> GetAllStocks([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
    
-            var stocks = await _stockRepo.GetAllStocksAsync();
+            var stocks = await _stockRepo.GetAllStocksAsync(query);
             var stocksDto = stocks.Select(s => s.ToStockDto());
             return Ok(stocksDto);
         }

@@ -4,35 +4,53 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stock;
+using api.Helpers;
 using api.interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
-
-/*We're going to use this class to implement the iStockRepository interface
- Index order to implement an interface, we need to provide the implementation for all the methods defined in the interface.
- This class will be used to just interact with the database and perform CRUD operations on the Stock model.
-*/
 
 namespace api.Repository
 {
     public class StockRepository : iStockRepository
     {
-        //now we need to implement dependency injection for the ApplicationDBContext
-        //we actually did that in the StockController, so we can use the same approach here.
         private readonly ApplicationDBContext _context;
 
-        //dependency injection happens through the constructor of the class.
         public StockRepository(ApplicationDBContext context)
         {
-            //this is going to bring in the database before we use it, AKA preheat the oven
             _context = context;
         }
 
-        //ALL METHODS ASYNC
-
-        public async Task<List<Stock>> GetAllStocksAsync()
+        public async Task<List<Stock>> GetAllStocksAsync(QueryObject query)
         {
-            return await _context.Stocks.Include(s => s.Comments).ToListAsync();
+            var stocks = _context.Stocks.Include(s => s.Comments).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("Symbol"))
+                {
+                    stocks = query.OrderByDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("Company Name"))
+                {
+                    stocks = query.OrderByDescending ? stocks.OrderByDescending(s => s.CompanyName) : stocks.OrderBy(s => s.CompanyName);
+                }
+            }
+
+            return await stocks.ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
