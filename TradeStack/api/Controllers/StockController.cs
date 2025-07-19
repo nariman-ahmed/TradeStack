@@ -67,11 +67,6 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var StockModel = stockDto.ToStockFromCreatedDto();
 
             await _stockRepo.CreateAsync(StockModel);
