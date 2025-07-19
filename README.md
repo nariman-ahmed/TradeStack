@@ -36,3 +36,20 @@
 - /DTOs --> Data Transfer Objects for cleaner API contracts
 - /appsettings.json --> DB configuration and setting
 - /Program.cs --> App entry point and service registration
+
+---
+
+## DEMO
+
+### CRUD Operations
+https://github.com/user-attachments/assets/b16c571d-589f-4e56-8149-5a6aa30cb05c
+
+### Error Checking
+https://github.com/user-attachments/assets/0b2e73da-fd06-4c33-9ae3-e9cc8d1df232
+
+### Data Validation
+https://github.com/user-attachments/assets/23f119b0-6757-413b-a98e-377fd3011c6a
+
+## Filtering, Sorting and Pagination
+https://github.com/user-attachments/assets/2bc13c68-9742-4657-b80f-1dfce9ab3cac
+
