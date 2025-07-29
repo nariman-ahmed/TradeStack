@@ -20,14 +20,12 @@ namespace api.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
         private readonly iStockRepository _stockRepo;
 
         //now instead on injecting the database context in the controller, we're going to inject the Stocks interface.
         public StockController(ApplicationDBContext context, iStockRepository stockrepo)
         {
             _stockRepo = stockrepo;
-            _context = context;
         }
 
         [HttpGet]
